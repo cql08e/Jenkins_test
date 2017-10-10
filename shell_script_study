@@ -1,0 +1,81 @@
+<1>向script传递参数
+[root@MiWiFi-R3-srv ~]# cat show.sh 
+#!/bin/bash
+echo $1 $2
+[root@MiWiFi-R3-srv ~]# ./show.sh jack mike
+jack mike
+#jack和mike就是传递的参数--位置变量--($1..$5..)
+<2>参数用法(cp举例)
+[root@MiWiFi-R3-srv ~]# ls 
+anaconda-ks.cfg  copy.sh
+[root@MiWiFi-R3-srv ~]# cat copy.sh 
+#!/bin/bash
+#cp $1 $2
+[root@MiWiFi-R3-srv ~]# sh copy.sh anaconda-ks.cfg /tmp/
+[root@MiWiFi-R3-srv ~]# ls /tmp/anaconda-ks.cfg 
+#将参数$1(anaconda-ks.cfg)成功cp到$2(/tmp/)
+<3>$#;$0;$?;$@;$*参数用法
+$#:参数个数
+[root@MiWiFi-R3-srv ~]# cat expr.sh 
+#!/bin/bash
+#echo $#
+[root@MiWiFi-R3-srv ~]# sh expr.sh 33 x
+2
+$0:script_name
+[root@MiWiFi-R3-srv ~]# cat expr.sh
+#!/bin/bash
+#echo $0
+[root@MiWiFi-R3-srv ~]# sh expr.sh 
+expr.sh
+$?:执行command的返回值。通常正确为0，错误为1
+$@:输出要处理的所有参数;虽然是全部输出，但是每一个变量参数是独立的
+$*:输出要处理的所有参数;全部输出，将所有参数看作整体
+[root@MiWiFi-R3-srv ~]# cat 9.25 
+#!/bin/bash
+#$@与$*的区别
+for i in "$@"
+do echo $i
+done
+echo "====================="
+for i in "$*"
+do echo $i
+done
+[root@MiWiFi-R3-srv ~]# sh 9.25 1 2 3
+1
+2
+3
+=====================
+1 2 3
+<4>定义函数
+[root@MiWiFi-R3-srv ~]# cat function 
+#!/bin/bash
+#定义函数
+function example (){
+	echo "ok!"
+	return 1
+	echo "no!"
+	}
+example
+[root@MiWiFi-R3-srv ~]# sh function 
+ok!
+<5>合并字符串
+[root@MiWiFi-R3-srv ~]# cat string 
+#!/bin/bash
+#合并字符串
+a=jack
+b=lisi
+c=${a}${b}
+echo $c
+[root@MiWiFi-R3-srv ~]# sh string 
+jacklisi
+<6>整数相加方法
+#!/bin/bash
+a=5
+b=6
+echo $(($a+$b))
+echo $[$a+$b]
+echo `expr $a + $b`
+awk 'BEGIN{print '"$a"'+'"$b"'}'
+<7>后台运行script
+nohup command &
+<8>shell修饰符
